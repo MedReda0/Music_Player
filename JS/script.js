@@ -62,8 +62,8 @@ addEventListener("DOMContentLoaded", () => {
 
   // Control buttons event listeners
   play_btn.addEventListener("click", playingToggle);
-  forward_btn.addEventListener("click", song_forward);
-  backward_btn.addEventListener("click", song_backward);
+  forward_btn.addEventListener("click", song_control(1));
+  backward_btn.addEventListener("click", song_control(-1));
   shuffle.addEventListener("click", () => {
     shuffle.classList.toggle("active");
     localItem_toggle("shuffle");
@@ -132,11 +132,12 @@ function playingToggle() {
 }
 
 // Play the next song in the list
-function song_forward() {
+function song_control(x) {
   if (playing) playingToggle();
-  current_song++;
+  current_song+=x;
   check_shuffle();
   localStorage.current_song = current_song;
+  song.currentTime = 0;
   limiter();
   songs[current_song].scrollIntoView({ behavior: "smooth" });
   loadsong(current_song);
@@ -147,21 +148,21 @@ function song_forward() {
   }
 }
 
-// Play the previous song in the list
-function song_backward() {
-  if (playing) playingToggle();
-  current_song--;
-  check_shuffle();
-  localStorage.current_song = current_song;
-  limiter();
-  songs[current_song].scrollIntoView({ behavior: "smooth" });
-  loadsong(current_song);
-  playingToggle();
-  if (repeat.classList.contains("active")) {
-    repeat_toggle();
-    localItem_toggle("repeat");
-  }
-}
+// // Play the previous song in the list
+// function song_backward() {
+//   if (playing) playingToggle();
+//   current_song--;
+//   check_shuffle();
+//   localStorage.current_song = current_song;
+//   limiter();
+//   songs[current_song].scrollIntoView({ behavior: "smooth" });
+//   loadsong(current_song);
+//   playingToggle();
+//   if (repeat.classList.contains("active")) {
+//     repeat_toggle();
+//     localItem_toggle("repeat");
+//   }
+// }
 
 // Ensure current_song index is within bounds
 function limiter() {
