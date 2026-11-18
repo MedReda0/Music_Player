@@ -8,7 +8,7 @@ let search_icon = document.querySelector(".search i");
 let section = document.querySelector("section");
 let song_cover = document.querySelector(".song-cover");
 let songs_index = document.querySelectorAll(".index");
-let songs = document.querySelectorAll("li");
+let songs = document.querySelectorAll("ul.list li");
 let song_name = document.querySelectorAll(".name");
 let progress_bar = document.querySelector(".progress_bar");
 let bar = document.querySelector(".bar");
@@ -27,7 +27,7 @@ let current_duration = document.querySelector(".current_duration");
 let duration = document.querySelectorAll(".duration");
 
 // Initialize variables
-let current_song = localStorage.current_song || 0;
+let current_song = +localStorage.current_song || 0;
 let playing = false;
 let song = new Audio();
 
@@ -62,8 +62,8 @@ addEventListener("DOMContentLoaded", () => {
 
   // Control buttons event listeners
   play_btn.addEventListener("click", playingToggle);
-  forward_btn.addEventListener("click", song_control(1));
-  backward_btn.addEventListener("click", song_control(-1));
+  forward_btn.addEventListener("click", ()=>{song_control(1)});
+  backward_btn.addEventListener("click", ()=>{song_control(-1)});
   shuffle.addEventListener("click", () => {
     shuffle.classList.toggle("active");
     localItem_toggle("shuffle");
@@ -88,7 +88,7 @@ addEventListener("DOMContentLoaded", () => {
         song.currentTime = 0;
         song.play();
       } else {
-        song_forward();
+        song_control(1);
       }
     }, 700);
   });
@@ -137,9 +137,9 @@ function song_control(x) {
   current_song+=x;
   check_shuffle();
   localStorage.current_song = current_song;
-  song.currentTime = 0;
   limiter();
   songs[current_song].scrollIntoView({ behavior: "smooth" });
+  localStorage.setItem("current_time", 0)
   loadsong(current_song);
   playingToggle();
   if (repeat.classList.contains("active")) {
